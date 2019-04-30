@@ -1,6 +1,7 @@
 const Joi = require('joi');
 const express = require('express');
 const app = express();
+const MongoClient = require('mongodb').MongoClient;
 
 app.use(express.json());
 
@@ -73,6 +74,16 @@ function validateCoin(coin){
    };
    return Joi.validate(coin, schema);
 }
+
+// Database connection
+
+const uri = "mongodb+srv://Vorbote:dontprayforme159%2A@cluster0-nflr2.gcp.mongodb.net/test?retryWrites=true";
+const client = new MongoClient(uri, { useNewUrlParser: true });
+client.connect(err => {
+  const collection = client.db("CoinsApi").collection("coins");
+  // perform actions on the collection object
+  client.close();
+});
 
 const port = process.env.PORT || 3000;
 app.listen(3000, () => console.log(`Listening on port ${port}...`));
